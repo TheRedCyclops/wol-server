@@ -19,7 +19,7 @@ def wol():
     ssh_hostname = request.args.get('ip')
     ssh_username = "theredcyclops"
     # set the location of the ssh key file
-    ssh_key = os.envirion['SSH_KEY_FILE']
+    ssh_key = os.environ['SSH_KEY_FILE']
     # read the disk password from secret
     disk_password_file_name = os.environ['DISK_PASSWORD_FILE']
     disk_password_file = open(disk_password_file_name, "r")

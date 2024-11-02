@@ -1,11 +1,18 @@
 services:
   wol-server:
-    image: wol-unlock:0.1
+    image: wol-unlock:0.2
     container_name: wol-server
     environment:
       - DISK_PASSWORD_FILE=/run/secrets/disk_password
+      - SSH_KEY_FILE=/run/secrets/ssh_key
     secrets:
       - disk_password
+      - ssh_key
+    ports:
+      - "8080:8080"
+    network_mode: host
 secrets:
   disk_password:
     file: secrets/disk_password
+  ssh_key:
+    file: $HOME/.ssh/id_ed25519
