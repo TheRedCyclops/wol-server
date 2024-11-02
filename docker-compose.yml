@@ -1,6 +1,6 @@
 services:
   wol-server:
-    image: wol-unlock:01
+    image: wol-unlock:0.1
     container_name: wol-server
     environment:
       - DISK_PASSWORD_FILE=/run/secrets/disk_password

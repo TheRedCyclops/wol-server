@@ -44,5 +44,5 @@ def wol():
     #    print("Server is down after WOL :(")
     #else:
     #    print(":)")
-if __name__ == 'app':
-    app.run(host="0.0.0.0", port=8000, debug=True)
+#if __name__ == 'app':
+#    app.run(host="0.0.0.0", port=8000, debug=True)
