@@ -1,0 +1,6 @@
+venv
+secrets
+data
+certs
+*cert*
+*key*
