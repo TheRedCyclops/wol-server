@@ -23,17 +23,17 @@ def wol():
     disk_password = disk_password_file.readline()
     disk_password_file.close()
 
-    return disk_password
-    ## Log in to the server
-    #if not s.login (ssh_hostname, ssh_username):
-    #    print("SSH session failed on login :(")
-    #    print(str(s))
-    #else:
-    #    print("SSH session login successful")
-    ## Send the disk password to unlock the disk
-    #    s.sendline (disk_password)
-    #    s.prompt()         # match the prompt
-    #    s.logout()
+    # Log in to the server
+    if not s.login (ssh_hostname, ssh_username):
+        print("SSH session failed on login :(")
+        print(str(s))
+    else:
+        print("SSH session login successful")
+    # Send the disk password to unlock the disk
+        s.sendline (disk_password)
+        s.prompt()         # match the prompt
+        s.logout()
+    return '200'
     ##    # Check the server is running
     ##sleep(10)
     ##if not requests.get('http://localhost:8000'):
