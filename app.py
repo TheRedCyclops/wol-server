@@ -18,7 +18,8 @@ def wol():
     s = pxssh.pxssh()
     ssh_hostname = request.args.get('ip')
     ssh_username = "theredcyclops"
-    # using a key instead of password for ssh, read from default .ssh/
+    # set the location of the ssh key file
+    ssh_key = os.envirion['SSH_KEY_FILE']
     # read the disk password from secret
     disk_password_file_name = os.environ['DISK_PASSWORD_FILE']
     disk_password_file = open(disk_password_file_name, "r")
@@ -26,7 +27,7 @@ def wol():
     disk_password_file.close()
 #
     # Log in to the server
-    if not s.login (ssh_hostname, ssh_username):
+    if not s.login (server=ssh_hostname, username=ssh_username, ssh_key=ssh_key):
         print("SSH session failed on login :(")
         print(str(s))
         return "Failed"
@@ -43,5 +44,5 @@ def wol():
     #    print("Server is down after WOL :(")
     #else:
     #    print(":)")
-if __name__ == '__main__':
+if __name__ == 'app':
     app.run(host="0.0.0.0", port=8000, debug=True)
