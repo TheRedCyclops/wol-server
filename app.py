@@ -12,15 +12,19 @@ def wol():
     wol_address = request.args.get('mac')
     send_magic_packet(wol_address)
     # wait for the specified time before trying to connect to the computer
-    wait = None
-    wait = int(request.args.get('wait'))
-    if wait is not None:
+    try:
+        wait = int(request.args.get('wait'))
+    except TypeError:
+        wait=None
+    if wait:
         sleep(wait)
     # set the max amount of tries to connect to the computer before giving up
-    max_tries = None
-    max_tries = int(request.args.get('max_tries'))
+    try:
+        max_tries = int(request.args.get('max_tries'))
+    except TypeError:
+        max_tries = None
     # unlock the disk on the server
-    if max_tries is not None:
+    if max_tries:
         tries=0
         while True: 
             try:
