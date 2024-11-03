@@ -1,1 +1,1 @@
-curl -i -X POST 'http://localhost:8000/wol?mac=aa:bb:cc:dd:ee:ff&ip=192.168.1.1&timeout=20'
+curl -i -X POST 'http://localhost:8000/wol?mac=aa:bb:cc:dd:ee:ff&ip=192.168.1.1&wait=5&max_tries=3'
