@@ -11,11 +11,31 @@ def wol():
     # send magic packet to wake up the server [WORKING]
     wol_address = request.args.get('mac')
     send_magic_packet(wol_address)
-    # wait for the computer to turn on before trying to unlock it
-    timeout = int(request.args.get('timeout'))
-    sleep(timeout)
+    # wait for the specified time before trying to connect to the computer
+    wait = None
+    wait = int(request.args.get('wait'))
+    if wait is not None:
+        sleep(wait)
+    # set the max amount of tries to connect to the computer before giving up
+    max_tries = None
+    max_tries = int(request.args.get('max_tries'))
     # unlock the disk on the server
-    s = pxssh.pxssh()
+    if max_tries is not None:
+        tries=0
+        while True: 
+            try:
+                if tries == max_tries:
+                    return "Failed to connect to the server"
+                    break
+                s = pxssh.pxssh()
+                tries += 1
+            except:
+                print("Failed to connect on attempt " + str(tries) + ", trying again..")
+            else:
+                print("Established SSH connection")
+                break
+    else:
+        s = pxssh.pxssh()
     ssh_hostname = request.args.get('ip')
     ssh_username = "theredcyclops"
     # set the location of the ssh key file
@@ -44,5 +64,5 @@ def wol():
     #    print("Server is down after WOL :(")
     #else:
     #    print(":)")
-#if __name__ == 'app':
-#    app.run(host="0.0.0.0", port=8000, debug=True)
+
+app.run(host="0.0.0.0", port=8000, debug=True)
