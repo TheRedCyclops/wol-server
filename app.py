@@ -62,6 +62,10 @@ def wol():
     # Send the disk password to unlock the disk
     ssh.exec_command(disk_password)
     return "Unlocked", 200
+    try
+        ssh.close()
+    except:
+        pass
     #    # Check the server is running
     #sleep(10)
     #if not requests.get('http://localhost:8000'):
