@@ -2,6 +2,7 @@ from wakeonlan import send_magic_packet
 from pexpect import pxssh
 from flask import Flask, request
 from time import sleep
+import paramiko
 #import requests
 import os
 
@@ -25,7 +26,9 @@ def wol():
     disk_password = disk_password_file.readline()
     disk_password_file.close()
     # Init the ssh session
-    s = pxssh.pxssh()
+    ssh = paramiko.SSHClient()
+    # Set the known hosts file
+    ssh.load_system_host_keys(os.environ['KNOWN_HOSTS_FILE'])
     # Log in to the server
     # wait for the specified time before trying to connect to the computer
     try:
@@ -45,9 +48,9 @@ def wol():
         while True: 
             try:
                 if tries == max_tries:
-                    return "Failed to connect to the server"
+                    return "Failed to connect to the server", 500
                     break
-                s.login (server=ssh_hostname, username=ssh_username, ssh_key=ssh_key)
+                ssh.connect(hostname=ssh_hostname, username=ssh_username, key_filename=ssh_key)
                 tries += 1
             except:
                 print("Failed to connect on attempt " + str(tries) + ", trying again..")
@@ -55,12 +58,10 @@ def wol():
                 print("Established SSH connection")
                 break
     else:
-        s = pxssh.pxssh()
+        return "Malformed request.", 400
     # Send the disk password to unlock the disk
-        s.sendline (disk_password)
-        s.prompt()         # match the prompt
-        s.logout()
-        return "Unlocked"
+    ssh.exec_command(disk_password)
+    return "Unlocked", 200
     #    # Check the server is running
     #sleep(10)
     #if not requests.get('http://localhost:8000'):

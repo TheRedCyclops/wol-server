@@ -1,5 +1,6 @@
 Flask==3.0.3
-pexpect==4.9.0
+pexpect==4.9.0 #Depracated
 wakeonlan==3.1.0
 python-dotenv==1.0.1
 gunicorn==23.0.0
+paramiko==3.5.0
