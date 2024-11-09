@@ -11,6 +11,22 @@ def wol():
     # send magic packet to wake up the server [WORKING]
     wol_address = request.args.get('mac')
     send_magic_packet(wol_address)
+    # set the hostname
+    ssh_hostname = request.args.get('ip')
+    # set the username
+    ssh_username = request.args.get('username')
+    if ssh_username is None:
+        ssh_username = 'root'
+    # set the location of the ssh key file
+    ssh_key = os.environ['SSH_KEY_FILE']
+    # read the disk password from secret
+    disk_password_file_name = os.environ['DISK_PASSWORD_FILE']
+    disk_password_file = open(disk_password_file_name, "r")
+    disk_password = disk_password_file.readline()
+    disk_password_file.close()
+    # Init the ssh session
+    s = pxssh.pxssh()
+    # Log in to the server
     # wait for the specified time before trying to connect to the computer
     try:
         wait = int(request.args.get('wait'))
@@ -31,7 +47,7 @@ def wol():
                 if tries == max_tries:
                     return "Failed to connect to the server"
                     break
-                s = pxssh.pxssh()
+                s.login (server=ssh_hostname, username=ssh_username, ssh_key=ssh_key)
                 tries += 1
             except:
                 print("Failed to connect on attempt " + str(tries) + ", trying again..")
@@ -40,23 +56,6 @@ def wol():
                 break
     else:
         s = pxssh.pxssh()
-    ssh_hostname = request.args.get('ip')
-    ssh_username = "theredcyclops"
-    # set the location of the ssh key file
-    ssh_key = os.environ['SSH_KEY_FILE']
-    # read the disk password from secret
-    disk_password_file_name = os.environ['DISK_PASSWORD_FILE']
-    disk_password_file = open(disk_password_file_name, "r")
-    disk_password = disk_password_file.readline()
-    disk_password_file.close()
-#
-    # Log in to the server
-    if not s.login (server=ssh_hostname, username=ssh_username, ssh_key=ssh_key):
-        print("SSH session failed on login :(")
-        print(str(s))
-        return "Failed"
-    else:
-        print("SSH session login successful")
     # Send the disk password to unlock the disk
         s.sendline (disk_password)
         s.prompt()         # match the prompt
