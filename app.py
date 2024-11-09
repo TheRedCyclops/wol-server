@@ -48,7 +48,7 @@ def wol():
         while True: 
             try:
                 if tries == max_tries:
-                    return "Failed to connect to the server", 500
+                    return "Failed to connect to the server", 504
                     break
                 ssh.connect(hostname=ssh_hostname, username=ssh_username, key_filename=ssh_key)
                 tries += 1
